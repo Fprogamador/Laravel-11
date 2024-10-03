@@ -57,15 +57,14 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, $id)
     {
         // Encontra o usuário pelo ID ou retorna uma mensagem de erro
-        $user = User::find($id);
 
-        if (!$user) {
-            return redirect()->back()->with('error', 'Usuário não encontrado!');
+        if (!$user = $user = User::find($id)) {
+            return back()->with('error', 'Usuário não encontrado!');
         }
 
         // Valida os dados da request
-        $data = $request->validated();
-
+        $data = $request->only('name', 'email');
+        
         // Se o campo de senha estiver presente, faz o hash da senha
         if ($request->filled('password')) {
             $data['password'] = bcrypt($request->password);
